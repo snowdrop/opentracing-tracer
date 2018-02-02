@@ -30,6 +30,7 @@ import com.uber.jaeger.senders.HttpSender;
 import com.uber.jaeger.senders.UdpSender;
 import com.uber.jaeger.tracerresolver.JaegerTracerResolver;
 import io.opentracing.contrib.tracerresolver.TracerResolver;
+import me.snowdrop.opentracing.tracer.customizers.B3CodecJaegerTracerCustomizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -56,6 +57,7 @@ public class JaegerAutoConfiguration {
     @Configuration
     @ConditionalOnProperty(value = "opentracing.jaeger.useTracerResolver", havingValue = "false", matchIfMissing = true)
     public static class ExplicitConfiguration {
+
         @Autowired(required = false)
         private List<JaegerTracerCustomizer> tracerCustomizers = Collections.emptyList();
 
@@ -124,6 +126,12 @@ public class JaegerAutoConfiguration {
         @Bean
         public Metrics reporterMetrics() {
             return new Metrics(new StatsFactoryImpl(new NullStatsReporter()));
+        }
+
+        @ConditionalOnProperty(value = "opentracing.jaeger.enableB3Propagation", havingValue = "true")
+        @Bean
+        public JaegerTracerCustomizer b3CodecJaegerTracerCustomizer() {
+            return new B3CodecJaegerTracerCustomizer();
         }
 
     }

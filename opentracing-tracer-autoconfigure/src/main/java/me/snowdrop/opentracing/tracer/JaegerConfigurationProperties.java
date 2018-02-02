@@ -43,6 +43,13 @@ public class JaegerConfigurationProperties {
      */
     private boolean logSpans = false;
 
+    /**
+     * Enable the handling of B3 headers like "X-B3-TraceId"
+     * This setting should be used when it is desired for Jaeger to be able to
+     * join traces started by other Zipkin instrumented applications
+     */
+    private boolean enableB3Propagation = false;
+
     private RemoteReporterProperties remoteReporterProperties = new RemoteReporterProperties();
 
     private HttpSenderProperties httpSenderProperties = new HttpSenderProperties();
@@ -79,6 +86,14 @@ public class JaegerConfigurationProperties {
 
     public void setLogSpans(boolean logSpans) {
         this.logSpans = logSpans;
+    }
+
+    public boolean isEnableB3Propagation() {
+        return enableB3Propagation;
+    }
+
+    public void setEnableB3Propagation(boolean enableB3Propagation) {
+        this.enableB3Propagation = enableB3Propagation;
     }
 
     public HttpSenderProperties getHttpSenderProperties() {
