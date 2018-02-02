@@ -43,7 +43,11 @@ public class JaegerConfigurationProperties {
      */
     private boolean logSpans = false;
 
-    private HttpReporter httpReporter = new HttpReporter();
+    private RemoteReporterProperties remoteReporterProperties = new RemoteReporterProperties();
+
+    private HttpSenderProperties httpSenderProperties = new HttpSenderProperties();
+
+    private UdpSenderProperties udpSenderProperties = new UdpSenderProperties();
 
     public boolean isEnabled() {
         return enabled;
@@ -77,31 +81,37 @@ public class JaegerConfigurationProperties {
         this.logSpans = logSpans;
     }
 
-    public HttpReporter getHttpReporter() {
-        return httpReporter;
+    public HttpSenderProperties getHttpSenderProperties() {
+        return httpSenderProperties;
     }
 
-    public void setHttpReporter(HttpReporter httpReporter) {
-        this.httpReporter = httpReporter;
+    public void setHttpSenderProperties(HttpSenderProperties httpSenderProperties) {
+        this.httpSenderProperties = httpSenderProperties;
     }
 
-    public static class HttpReporter {
+    public RemoteReporterProperties getRemoteReporterProperties() {
+        return remoteReporterProperties;
+    }
 
-        private String url;
+    public void setRemoteReporterProperties(
+            RemoteReporterProperties remoteReporterProperties) {
+        this.remoteReporterProperties = remoteReporterProperties;
+    }
+
+    public UdpSenderProperties getUdpSenderProperties() {
+        return udpSenderProperties;
+    }
+
+    public void setUdpSenderProperties(
+            UdpSenderProperties udpSenderProperties) {
+        this.udpSenderProperties = udpSenderProperties;
+    }
+
+    public static class RemoteReporterProperties {
 
         private int flushInterval = 1000;
 
         private int maxQueueSize = 100;
-
-        private int maxPayload = 1048576;
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
 
         public int getFlushInterval() {
             return flushInterval;
@@ -119,12 +129,61 @@ public class JaegerConfigurationProperties {
             this.maxQueueSize = maxQueueSize;
         }
 
+    }
+
+    public static class HttpSenderProperties {
+
+        private String url;
+
+        private int maxPayload = 1048576;
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
         public int getMaxPayload() {
             return maxPayload;
         }
 
         public void setMaxPayload(int maxPayload) {
             this.maxPayload = maxPayload;
+        }
+    }
+
+    public static class UdpSenderProperties {
+
+        private String host;
+
+        private int port;
+
+        private int maxPacketSize = 65000;
+
+        public String getHost() {
+            return host;
+        }
+
+        public void setHost(String host) {
+            this.host = host;
+        }
+
+        public int getPort() {
+            return port;
+        }
+
+        public void setPort(int port) {
+            this.port = port;
+        }
+
+        public int getMaxPacketSize() {
+            return maxPacketSize;
+        }
+
+        public void setMaxPacketSize(int maxPacketSize) {
+            this.maxPacketSize = maxPacketSize;
         }
     }
 }

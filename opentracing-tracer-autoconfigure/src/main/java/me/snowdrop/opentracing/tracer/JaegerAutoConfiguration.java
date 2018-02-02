@@ -27,6 +27,7 @@ import com.uber.jaeger.reporters.Reporter;
 import com.uber.jaeger.samplers.ConstSampler;
 import com.uber.jaeger.samplers.Sampler;
 import com.uber.jaeger.senders.HttpSender;
+import com.uber.jaeger.senders.UdpSender;
 import com.uber.jaeger.tracerresolver.JaegerTracerResolver;
 import io.opentracing.contrib.tracerresolver.TracerResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -78,13 +80,20 @@ public class JaegerAutoConfiguration {
         @ConditionalOnMissingBean(Reporter.class)
         @Bean
         public Reporter reporter(JaegerConfigurationProperties properties, Metrics metrics) {
+            List<Reporter> reporters = new LinkedList<>();
 
-            final List<Reporter> reporters = new LinkedList<>();
+            JaegerConfigurationProperties.RemoteReporterProperties remoteReporterProperties =
+                    properties.getRemoteReporterProperties();
+            JaegerConfigurationProperties.HttpSenderProperties httpSenderProperties =
+                    properties.getHttpSenderProperties();
+            if (!StringUtils.isEmpty(httpSenderProperties.getUrl())) {
+                reporters.add(getHttpReporter(metrics, remoteReporterProperties, httpSenderProperties));
+            }
 
-            final JaegerConfigurationProperties.HttpReporter httpReporter = properties.getHttpReporter();
-            final String httpUrl = httpReporter.getUrl();
-            if (httpUrl != null && !httpUrl.isEmpty()) {
-                reporters.add(getHttpReporter(metrics, httpReporter));
+            JaegerConfigurationProperties.UdpSenderProperties udpSenderProperties =
+                    properties.getUdpSenderProperties();
+            if (!StringUtils.isEmpty(udpSenderProperties.getHost())) {
+                reporters.add(getUdpReporter(metrics, remoteReporterProperties, udpSenderProperties));
             }
 
             if (properties.isLogSpans()) {
@@ -94,10 +103,21 @@ public class JaegerAutoConfiguration {
             return new CompositeReporter(reporters.toArray(new Reporter[reporters.size()]));
         }
 
-        private Reporter getHttpReporter(Metrics metrics, JaegerConfigurationProperties.HttpReporter httpReporter) {
-            HttpSender httpSender = getHttpSender(httpReporter);
-            return new RemoteReporter(httpSender, httpReporter.getFlushInterval(),
-                    httpReporter.getMaxQueueSize(), metrics);
+        private Reporter getUdpReporter(Metrics metrics,
+                JaegerConfigurationProperties.RemoteReporterProperties remoteReporterProperties,
+                JaegerConfigurationProperties.UdpSenderProperties udpSenderProperties) {
+            UdpSender udpSender = new UdpSender(udpSenderProperties.getHost(), udpSenderProperties.getPort(),
+                    udpSenderProperties.getMaxPacketSize());
+            return new RemoteReporter(udpSender, remoteReporterProperties.getFlushInterval(),
+                    remoteReporterProperties.getMaxQueueSize(), metrics);
+        }
+
+        private Reporter getHttpReporter(Metrics metrics,
+                JaegerConfigurationProperties.RemoteReporterProperties remoteReporterProperties,
+                JaegerConfigurationProperties.HttpSenderProperties httpSenderProperties) {
+            HttpSender httpSender = new HttpSender(httpSenderProperties.getUrl(), httpSenderProperties.getMaxPayload());
+            return new RemoteReporter(httpSender, remoteReporterProperties.getFlushInterval(),
+                    remoteReporterProperties.getMaxQueueSize(), metrics);
         }
 
         @ConditionalOnMissingBean(Metrics.class)
@@ -106,9 +126,6 @@ public class JaegerAutoConfiguration {
             return new Metrics(new StatsFactoryImpl(new NullStatsReporter()));
         }
 
-        private HttpSender getHttpSender(JaegerConfigurationProperties.HttpReporter properties) {
-            return new HttpSender(properties.getUrl(), properties.getMaxPayload());
-        }
     }
 
 
