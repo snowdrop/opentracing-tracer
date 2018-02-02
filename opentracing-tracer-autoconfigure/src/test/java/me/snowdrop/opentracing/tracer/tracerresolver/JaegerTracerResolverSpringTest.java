@@ -11,35 +11,34 @@
  *  limitations under the License.
  */
 
-package me.snowdrop.opentracing.tracer;
+package me.snowdrop.opentracing.tracer.tracerresolver;
 
-import io.opentracing.Tracer;
+import me.snowdrop.opentracing.tracer.AbstractTracerSpringTest;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = {
-        JaegerAutoConfiguration.class
-})
+
 @TestPropertySource(
         properties = {
-            "spring.main.banner-mode=off",
-            "opentracing.jaeger.enabled=false"
+                "spring.main.banner-mode=off",
+                "opentracing.jaeger.enabled=true",
+                "opentracing.jaeger.useTracerResolver=true"
         }
 )
-public class JaegerTracerDisabledIntegrationTest {
+public class JaegerTracerResolverSpringTest extends AbstractTracerSpringTest {
 
-    @Autowired(required = false)
-    Tracer tracer;
+    @BeforeClass
+    public static void beforeClass() {
+        //JAEGER_SERVICE_NAME is a mandatory property for TracerResolver
+        System.setProperty("JAEGER_SERVICE_NAME", "spring-boot");
+    }
 
     @Test
-    public void testNotTracerBeanExists() {
-        assertThat(tracer).isNull();
+    public void testIfTracerIsJaegerTracer() {
+        assertThat(tracer).isNotNull();
+        assertThat(tracer).isInstanceOf(com.uber.jaeger.Tracer.class);
     }
 }

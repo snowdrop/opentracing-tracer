@@ -14,35 +14,17 @@
 package me.snowdrop.opentracing.tracer;
 
 import io.opentracing.Tracer;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {
         JaegerAutoConfiguration.class
 })
-@TestPropertySource(
-        locations = {
-            "classpath:jaeger-it-test-application.properties"
-        },
-        properties = {
-            "spring.main.banner-mode=off"
-        }
-)
-public class JaegerTracerEnabledIntegrationTest {
+public abstract class AbstractTracerSpringTest {
 
     @Autowired(required = false)
-    Tracer tracer;
-
-    @Test
-    public void testIfTracerIsJaegerTracer() {
-        assertThat(tracer).isNotNull();
-        assertThat(tracer).isInstanceOf(com.uber.jaeger.Tracer.class);
-    }
+    protected Tracer tracer;
 }
