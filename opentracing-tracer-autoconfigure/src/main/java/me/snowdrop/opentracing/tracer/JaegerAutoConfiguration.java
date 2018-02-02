@@ -16,10 +16,20 @@
 
 package me.snowdrop.opentracing.tracer;
 
+import com.uber.jaeger.Tracer.Builder;
+import com.uber.jaeger.reporters.Reporter;
+import com.uber.jaeger.samplers.ConstSampler;
+import com.uber.jaeger.samplers.Sampler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author <a href="mailto:gytis@redhat.com">Gytis Trikleris</a>
@@ -28,6 +38,34 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnClass(com.uber.jaeger.Tracer.class)
 @ConditionalOnMissingBean(io.opentracing.Tracer.class)
 @ConditionalOnProperty(value = "opentracing.jaeger.enabled", havingValue = "true", matchIfMissing = true)
+@EnableConfigurationProperties(JaegerConfigurationProperties.class)
 public class JaegerAutoConfiguration {
+
+    @Autowired(required = false)
+    private List<JaegerTracerCustomizer> tracerCustomizers = Collections.emptyList();
+
+    @Bean
+    public io.opentracing.Tracer tracer(JaegerConfigurationProperties jaegerConfigurationProperties,
+                                        Sampler sampler,
+                                        Reporter reporter) {
+
+        final Builder builder = new Builder(jaegerConfigurationProperties.getServiceName(), reporter, sampler);
+
+        tracerCustomizers.forEach(c -> c.customize(builder));
+
+        return builder.build();
+    }
+
+    @ConditionalOnMissingBean(Sampler.class)
+    @Bean
+    public Sampler sampler() {
+        return new ConstSampler(true); //TODO Ponder this since its probably not the best default
+    }
+
+    @ConditionalOnMissingBean(Reporter.class)
+    @Bean
+    public Reporter reporter() {
+        return null;
+    }
 
 }

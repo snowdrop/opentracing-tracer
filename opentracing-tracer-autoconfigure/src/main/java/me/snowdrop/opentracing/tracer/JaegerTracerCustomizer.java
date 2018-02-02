@@ -13,34 +13,14 @@
 
 package me.snowdrop.opentracing.tracer;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.uber.jaeger.Tracer;
 
-@ConfigurationProperties("opentracing.jaeger")
-public class JaegerConfigurationProperties {
-
-    /**
-     * Enable Jaeger Tracer
-     */
-    private boolean enabled = true;
+@FunctionalInterface
+public interface JaegerTracerCustomizer {
 
     /**
-     * The serviceName that the tracer will use
+     * Provides the ability to execute arbitrary operations on the builder
+     * The customizer should NOT call the build method
      */
-    private String serviceName = "spring-boot";
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-    }
+    void customize(Tracer.Builder builder);
 }
