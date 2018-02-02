@@ -17,9 +17,10 @@
 package me.snowdrop.opentracing.tracer;
 
 import com.uber.jaeger.Tracer.Builder;
+import com.uber.jaeger.metrics.InMemoryStatsReporter;
 import com.uber.jaeger.metrics.Metrics;
 import com.uber.jaeger.metrics.NullStatsReporter;
-import com.uber.jaeger.metrics.StatsFactoryImpl;
+import com.uber.jaeger.metrics.StatsReporter;
 import com.uber.jaeger.reporters.CompositeReporter;
 import com.uber.jaeger.reporters.LoggingReporter;
 import com.uber.jaeger.reporters.RemoteReporter;
@@ -124,8 +125,17 @@ public class JaegerAutoConfiguration {
 
         @ConditionalOnMissingBean(Metrics.class)
         @Bean
-        public Metrics reporterMetrics() {
-            return new Metrics(new StatsFactoryImpl(new NullStatsReporter()));
+        public Metrics reporterMetrics(StatsReporter statsReporter) {
+            return Metrics.fromStatsReporter(statsReporter);
+        }
+
+        @ConditionalOnMissingBean(StatsReporter.class)
+        @Bean
+        public StatsReporter statsReporter(JaegerConfigurationProperties properties) {
+            if (properties.isEnableMetrics()) {
+                return new InMemoryStatsReporter();
+            }
+            return new NullStatsReporter();
         }
 
         @ConditionalOnProperty(value = "opentracing.jaeger.enableB3Propagation", havingValue = "true")

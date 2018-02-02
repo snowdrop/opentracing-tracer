@@ -50,6 +50,12 @@ public class JaegerConfigurationProperties {
      */
     private boolean enableB3Propagation = false;
 
+    /**
+     * Enable the collections of metrics of collection process
+     * Setting this to true will enable {@link com.uber.jaeger.metrics.InMemoryStatsReporter}
+     */
+    private boolean enableMetrics = false;
+
     private RemoteReporterProperties remoteReporterProperties = new RemoteReporterProperties();
 
     private HttpSenderProperties httpSenderProperties = new HttpSenderProperties();
@@ -94,6 +100,14 @@ public class JaegerConfigurationProperties {
 
     public void setEnableB3Propagation(boolean enableB3Propagation) {
         this.enableB3Propagation = enableB3Propagation;
+    }
+
+    public boolean isEnableMetrics() {
+        return enableMetrics;
+    }
+
+    public void setEnableMetrics(boolean enableMetrics) {
+        this.enableMetrics = enableMetrics;
     }
 
     public HttpSenderProperties getHttpSenderProperties() {
