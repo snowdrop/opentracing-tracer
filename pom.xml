@@ -60,6 +60,7 @@
 
     <jaeger.version>0.24.0</jaeger.version>
     <opentracing.version>0.31.0</opentracing.version>
+    <opentracing-contrib.version>0.1.0</opentracing-contrib.version>
     <spring-boot.version>1.5.10.RELEASE</spring-boot.version>
   </properties>
 

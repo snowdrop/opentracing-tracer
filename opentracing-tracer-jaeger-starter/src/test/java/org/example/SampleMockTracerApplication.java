@@ -19,7 +19,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class SampleApplication {
+public class SampleMockTracerApplication {
 
     @Bean
     public Tracer mockTracer() {

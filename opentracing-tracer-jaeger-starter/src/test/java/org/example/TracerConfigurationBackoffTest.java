@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SampleApplication.class, properties = {"spring.main.banner-mode=off"})
+@SpringBootTest(classes = SampleMockTracerApplication.class, properties = {"spring.main.banner-mode=off"})
 public class TracerConfigurationBackoffTest {
 
     @Autowired
