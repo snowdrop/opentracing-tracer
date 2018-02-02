@@ -33,6 +33,21 @@
     </license>
   </licenses>
 
+  <developers>
+    <developer>
+        <id>gytis</id>
+        <name>Gytis Trikleris</name>
+        <organization>Red Hat Inc.</organization>
+        <organizationUrl>https://www.redhat.com</organizationUrl>
+    </developer>
+    <developer>
+        <id>geoand</id>
+        <name>Georgios Andrianakis</name>
+        <organization>Red Hat Inc.</organization>
+        <organizationUrl>https://www.redhat.com</organizationUrl>
+    </developer>
+  </developers>
+
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -73,6 +88,37 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+            <execution>
+                <id>attach-sources</id>
+                <goals>
+                    <goal>jar-no-fork</goal>
+                </goals>
+            </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+            <execution>
+                <id>attach-sources</id>
+                <goals>
+                    <goal>jar</goal>
+                </goals>
+            </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
   <modules>
     <module>opentracing-tracer-autoconfigure</module>
