@@ -82,7 +82,9 @@ public class JaegerAutoConfiguration {
 
         @ConditionalOnMissingBean(Reporter.class)
         @Bean
-        public Reporter reporter(JaegerConfigurationProperties properties, Metrics metrics) {
+        public Reporter reporter(JaegerConfigurationProperties properties,
+                                 Metrics metrics,
+                                 @Autowired(required = false) ReporterAppender reporterAppender) {
             List<Reporter> reporters = new LinkedList<>();
 
             JaegerConfigurationProperties.RemoteReporterProperties remoteReporterProperties =
@@ -101,6 +103,10 @@ public class JaegerAutoConfiguration {
 
             if (properties.isLogSpans()) {
                 reporters.add(new LoggingReporter());
+            }
+
+            if (reporterAppender != null) {
+                reporterAppender.append(reporters);
             }
 
             return new CompositeReporter(reporters.toArray(new Reporter[reporters.size()]));
