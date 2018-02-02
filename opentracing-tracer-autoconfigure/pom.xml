@@ -46,7 +46,6 @@
     <dependency>
       <groupId>com.uber.jaeger</groupId>
       <artifactId>jaeger-tracerresolver</artifactId>
-      <version>${jaeger.version}</version>
       <optional>true</optional>
     </dependency>
 
