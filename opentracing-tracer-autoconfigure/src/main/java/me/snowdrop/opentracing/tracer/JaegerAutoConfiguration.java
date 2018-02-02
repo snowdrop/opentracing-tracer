@@ -17,6 +17,9 @@
 package me.snowdrop.opentracing.tracer;
 
 import com.uber.jaeger.Tracer.Builder;
+import com.uber.jaeger.metrics.Metrics;
+import com.uber.jaeger.metrics.NullStatsReporter;
+import com.uber.jaeger.metrics.StatsFactoryImpl;
 import com.uber.jaeger.reporters.Reporter;
 import com.uber.jaeger.samplers.ConstSampler;
 import com.uber.jaeger.samplers.Sampler;
@@ -67,10 +70,23 @@ public class JaegerAutoConfiguration {
             return new ConstSampler(true); //TODO Ponder this since its probably not the best default
         }
 
+        /**
+         * Configure a remote Reporter
+         * TODO refactor to take into account the existence of CompositeReporter
+         */
         @ConditionalOnMissingBean(Reporter.class)
         @Bean
-        public Reporter reporter() {
+        public Reporter remoteReporter(JaegerConfigurationProperties jaegerConfigurationProperties,
+                                       Metrics reporterMetrics) {
+
+            //TODO implement
             return null;
+        }
+
+        @ConditionalOnMissingBean(Metrics.class)
+        @Bean
+        public Metrics reporterMetrics() {
+            return new Metrics(new StatsFactoryImpl(new NullStatsReporter()));
         }
     }
 

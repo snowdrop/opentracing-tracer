@@ -15,6 +15,8 @@ package me.snowdrop.opentracing.tracer;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.concurrent.TimeUnit;
+
 @ConfigurationProperties("opentracing.jaeger")
 public class JaegerConfigurationProperties {
 
@@ -38,6 +40,8 @@ public class JaegerConfigurationProperties {
      */
     private String serviceName = "spring-boot";
 
+    private RemoteReporter remoteRemoteReporter = new RemoteReporter();
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -60,5 +64,37 @@ public class JaegerConfigurationProperties {
 
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
+    }
+
+    public RemoteReporter getRemoteRemoteReporter() {
+        return remoteRemoteReporter;
+    }
+
+    public void setRemoteRemoteReporter(RemoteReporter remoteRemoteReporter) {
+        this.remoteRemoteReporter = remoteRemoteReporter;
+    }
+
+    private static class RemoteReporter {
+
+        private int flushInterval = 10;
+
+        private TimeUnit flushTimeUnit = TimeUnit.MILLISECONDS;
+
+
+        public int getFlushInterval() {
+            return flushInterval;
+        }
+
+        public void setFlushInterval(int flushInterval) {
+            this.flushInterval = flushInterval;
+        }
+
+        public TimeUnit getFlushTimeUnit() {
+            return flushTimeUnit;
+        }
+
+        public void setFlushTimeUnit(TimeUnit flushTimeUnit) {
+            this.flushTimeUnit = flushTimeUnit;
+        }
     }
 }
