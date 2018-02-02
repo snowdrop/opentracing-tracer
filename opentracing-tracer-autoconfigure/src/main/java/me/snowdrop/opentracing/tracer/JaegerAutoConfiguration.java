@@ -16,15 +16,18 @@
 
 package me.snowdrop.opentracing.tracer;
 
-import com.uber.jaeger.Tracer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * @author <a href="mailto:gytis@redhat.com">Gytis Trikleris</a>
  */
 @Configuration
-@ConditionalOnClass(Tracer.class)
+@ConditionalOnClass(com.uber.jaeger.Tracer.class)
+@ConditionalOnMissingBean(io.opentracing.Tracer.class)
+@ConditionalOnProperty(value = "opentracing.jaeger.enabled", havingValue = "true", matchIfMissing = true)
 public class JaegerAutoConfiguration {
 
 }
