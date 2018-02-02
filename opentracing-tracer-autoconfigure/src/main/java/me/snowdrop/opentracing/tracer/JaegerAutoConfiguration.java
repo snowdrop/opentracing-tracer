@@ -20,6 +20,8 @@ import com.uber.jaeger.Tracer.Builder;
 import com.uber.jaeger.reporters.Reporter;
 import com.uber.jaeger.samplers.ConstSampler;
 import com.uber.jaeger.samplers.Sampler;
+import com.uber.jaeger.tracerresolver.JaegerTracerResolver;
+import io.opentracing.contrib.tracerresolver.TracerResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -41,31 +43,50 @@ import java.util.List;
 @EnableConfigurationProperties(JaegerConfigurationProperties.class)
 public class JaegerAutoConfiguration {
 
-    @Autowired(required = false)
-    private List<JaegerTracerCustomizer> tracerCustomizers = Collections.emptyList();
+    @Configuration
+    @ConditionalOnProperty(value = "opentracing.jaeger.useTracerResolver", havingValue = "false", matchIfMissing = true)
+    public static class ExplicitConfiguration {
+        @Autowired(required = false)
+        private List<JaegerTracerCustomizer> tracerCustomizers = Collections.emptyList();
 
-    @Bean
-    public io.opentracing.Tracer tracer(JaegerConfigurationProperties jaegerConfigurationProperties,
-                                        Sampler sampler,
-                                        Reporter reporter) {
+        @Bean
+        public io.opentracing.Tracer tracer(JaegerConfigurationProperties jaegerConfigurationProperties,
+                                            Sampler sampler,
+                                            Reporter reporter) {
 
-        final Builder builder = new Builder(jaegerConfigurationProperties.getServiceName(), reporter, sampler);
+            final Builder builder = new Builder(jaegerConfigurationProperties.getServiceName(), reporter, sampler);
 
-        tracerCustomizers.forEach(c -> c.customize(builder));
+            tracerCustomizers.forEach(c -> c.customize(builder));
 
-        return builder.build();
+            return builder.build();
+        }
+
+        @ConditionalOnMissingBean(Sampler.class)
+        @Bean
+        public Sampler sampler() {
+            return new ConstSampler(true); //TODO Ponder this since its probably not the best default
+        }
+
+        @ConditionalOnMissingBean(Reporter.class)
+        @Bean
+        public Reporter reporter() {
+            return null;
+        }
     }
 
-    @ConditionalOnMissingBean(Sampler.class)
-    @Bean
-    public Sampler sampler() {
-        return new ConstSampler(true); //TODO Ponder this since its probably not the best default
-    }
 
-    @ConditionalOnMissingBean(Reporter.class)
-    @Bean
-    public Reporter reporter() {
-        return null;
-    }
+    /**
+     * TODO perhaps in this case we can map some of the properties from the Spring environment to System Properties
+     * that TracerResolver expects
+     */
+    @Configuration
+    @ConditionalOnProperty(value = "opentracing.jaeger.useTracerResolver", havingValue = "true")
+    @ConditionalOnClass(JaegerTracerResolver.class)
+    public static class TracerResolverConfiguration {
 
+        @Bean
+        public io.opentracing.Tracer tracer() {
+            return TracerResolver.resolveTracer();
+        }
+    }
 }
