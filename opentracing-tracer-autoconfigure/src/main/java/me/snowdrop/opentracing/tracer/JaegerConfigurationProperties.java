@@ -13,6 +13,7 @@
 
 package me.snowdrop.opentracing.tracer;
 
+import com.uber.jaeger.Configuration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("opentracing.jaeger")
@@ -61,6 +62,14 @@ public class JaegerConfigurationProperties {
     private HttpSenderProperties httpSenderProperties = new HttpSenderProperties();
 
     private UdpSenderProperties udpSenderProperties = new UdpSenderProperties();
+
+    private ConstSampler constSampler = new ConstSampler();
+
+    private ProbabilisticSampler probabilisticSampler = new ProbabilisticSampler();
+
+    private RateLimitingSampler rateLimitingSampler = new RateLimitingSampler();
+
+    private RemoteControlledSampler remoteControlledSampler = new RemoteControlledSampler();
 
     public boolean isEnabled() {
         return enabled;
@@ -135,6 +144,40 @@ public class JaegerConfigurationProperties {
             UdpSenderProperties udpSenderProperties) {
         this.udpSenderProperties = udpSenderProperties;
     }
+
+    public ConstSampler getConstSampler() {
+        return constSampler;
+    }
+
+    public void setConstSampler(ConstSampler constSampler) {
+        this.constSampler = constSampler;
+    }
+
+    public ProbabilisticSampler getProbabilisticSampler() {
+        return probabilisticSampler;
+    }
+
+    public void setProbabilisticSampler(ProbabilisticSampler probabilisticSampler) {
+        this.probabilisticSampler = probabilisticSampler;
+    }
+
+    public RateLimitingSampler getRateLimitingSampler() {
+        return rateLimitingSampler;
+    }
+
+    public void setRateLimitingSampler(RateLimitingSampler rateLimitingSampler) {
+        this.rateLimitingSampler = rateLimitingSampler;
+    }
+
+    public RemoteControlledSampler getRemoteControlledSampler() {
+        return remoteControlledSampler;
+    }
+
+    public void setRemoteControlledSampler(RemoteControlledSampler remoteControlledSampler) {
+        this.remoteControlledSampler = remoteControlledSampler;
+    }
+
+
 
     public static class RemoteReporterProperties {
 
@@ -213,6 +256,69 @@ public class JaegerConfigurationProperties {
 
         public void setMaxPacketSize(int maxPacketSize) {
             this.maxPacketSize = maxPacketSize;
+        }
+    }
+
+    public static class ConstSampler {
+        private Boolean decision;
+
+        public Boolean getDecision() {
+            return decision;
+        }
+
+        public void setDecision(Boolean decision) {
+            this.decision = decision;
+        }
+    }
+
+    public static class ProbabilisticSampler {
+        private Double samplingRate;
+
+        public Double getSamplingRate() {
+            return samplingRate;
+        }
+
+        public void setSamplingRate(Double samplingRate) {
+            this.samplingRate = samplingRate;
+        }
+    }
+
+    public static class RateLimitingSampler {
+        private Double maxTracesPerSecond;
+
+        public Double getMaxTracesPerSecond() {
+            return maxTracesPerSecond;
+        }
+
+        public void setMaxTracesPerSecond(Double maxTracesPerSecond) {
+            this.maxTracesPerSecond = maxTracesPerSecond;
+        }
+    }
+
+    public static class RemoteControlledSampler {
+
+        /**
+         * i.e. localhost:5778
+         */
+        private String hostPort;
+
+        private Double samplingRate = Configuration.DEFAULT_SAMPLING_PROBABILITY;
+
+
+        public String getHostPort() {
+            return hostPort;
+        }
+
+        public void setHostPort(String hostPort) {
+            this.hostPort = hostPort;
+        }
+
+        public Double getSamplingRate() {
+            return samplingRate;
+        }
+
+        public void setSamplingRate(Double samplingRate) {
+            this.samplingRate = samplingRate;
         }
     }
 }

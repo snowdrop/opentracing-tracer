@@ -26,6 +26,10 @@ import com.uber.jaeger.reporters.LoggingReporter;
 import com.uber.jaeger.reporters.RemoteReporter;
 import com.uber.jaeger.reporters.Reporter;
 import com.uber.jaeger.samplers.ConstSampler;
+import com.uber.jaeger.samplers.HttpSamplingManager;
+import com.uber.jaeger.samplers.ProbabilisticSampler;
+import com.uber.jaeger.samplers.RateLimitingSampler;
+import com.uber.jaeger.samplers.RemoteControlledSampler;
 import com.uber.jaeger.samplers.Sampler;
 import com.uber.jaeger.senders.HttpSender;
 import com.uber.jaeger.senders.UdpSender;
@@ -72,12 +76,6 @@ public class JaegerAutoConfiguration {
             tracerCustomizers.forEach(c -> c.customize(builder));
 
             return builder.build();
-        }
-
-        @ConditionalOnMissingBean(Sampler.class)
-        @Bean
-        public Sampler sampler() {
-            return new ConstSampler(true); //TODO Ponder this since its probably not the best default
         }
 
         @ConditionalOnMissingBean(Reporter.class)
@@ -142,6 +140,39 @@ public class JaegerAutoConfiguration {
         @Bean
         public JaegerTracerCustomizer b3CodecJaegerTracerCustomizer() {
             return new B3CodecJaegerTracerCustomizer();
+        }
+
+        /**
+         * Decide on what Sampler to use based on the various configuration options in JaegerConfigurationProperties
+         * Fallback to ConstSampler(true) when no Sampler is configured
+         */
+        @ConditionalOnMissingBean(Sampler.class)
+        @Bean
+        public Sampler sampler(JaegerConfigurationProperties properties, Metrics metrics) {
+            if (properties.getConstSampler().getDecision() != null) {
+                return new ConstSampler(properties.getConstSampler().getDecision());
+            }
+
+            if (properties.getProbabilisticSampler().getSamplingRate() != null) {
+                return new ProbabilisticSampler(properties.getProbabilisticSampler().getSamplingRate());
+            }
+
+            if (properties.getRateLimitingSampler().getMaxTracesPerSecond() != null) {
+                return new RateLimitingSampler(properties.getRateLimitingSampler().getMaxTracesPerSecond());
+            }
+
+            if (!StringUtils.isEmpty(properties.getRemoteControlledSampler().getHostPort())) {
+                JaegerConfigurationProperties.RemoteControlledSampler samplerProperties
+                        = properties.getRemoteControlledSampler();
+
+                Sampler initialSampler = new ProbabilisticSampler(samplerProperties.getSamplingRate());
+                HttpSamplingManager manager = new HttpSamplingManager(samplerProperties.getHostPort());
+
+                return new RemoteControlledSampler(properties.getServiceName(), manager, initialSampler, metrics);
+            }
+
+            //fallback to sampling every trace
+            return new ConstSampler(true);
         }
 
     }
