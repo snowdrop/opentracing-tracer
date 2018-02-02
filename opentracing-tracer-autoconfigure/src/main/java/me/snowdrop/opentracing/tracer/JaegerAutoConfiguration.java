@@ -76,10 +76,12 @@ public class JaegerAutoConfiguration {
         @ConditionalOnMissingBean(Reporter.class)
         @Bean
         public Reporter reporter(JaegerConfigurationProperties properties, Metrics metrics) {
-            if (properties.getHttpCollectorUrl() != null && !properties.getHttpCollectorUrl().isEmpty()) {
-                HttpSender httpSender = getHttpSender(properties);
-                return new RemoteReporter(httpSender, properties.getHttpCollectorFlushInterval(),
-                        properties.getHttpCollectorMaxQueueSize(), metrics);
+            final JaegerConfigurationProperties.HttpReporter httpReporter = properties.getHttpReporter();
+            final String httpUrl = httpReporter.getUrl();
+            if (httpUrl != null && !httpUrl.isEmpty()) {
+                HttpSender httpSender = getHttpSender(httpReporter);
+                return new RemoteReporter(httpSender, httpReporter.getFlushInterval(),
+                        httpReporter.getMaxQueueSize(), metrics);
             }
 
             return new NoopReporter();
@@ -91,8 +93,8 @@ public class JaegerAutoConfiguration {
             return new Metrics(new StatsFactoryImpl(new NullStatsReporter()));
         }
 
-        private HttpSender getHttpSender(JaegerConfigurationProperties properties) {
-            return new HttpSender(properties.getHttpCollectorUrl(), properties.getHttpCollectorMaxPayload());
+        private HttpSender getHttpSender(JaegerConfigurationProperties.HttpReporter properties) {
+            return new HttpSender(properties.getUrl(), properties.getMaxPayload());
         }
     }
 

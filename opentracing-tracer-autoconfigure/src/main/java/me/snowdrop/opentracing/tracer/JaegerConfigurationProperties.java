@@ -15,8 +15,6 @@ package me.snowdrop.opentracing.tracer;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.concurrent.TimeUnit;
-
 @ConfigurationProperties("opentracing.jaeger")
 public class JaegerConfigurationProperties {
 
@@ -40,13 +38,7 @@ public class JaegerConfigurationProperties {
      */
     private String serviceName = "spring-boot";
 
-    private String httpCollectorUrl;
-
-    private int httpCollectorFlushInterval;  // TODO add default
-
-    private int httpCollectorMaxQueueSize; // TODO add default
-
-    private int httpCollectorMaxPayload = 1048576;
+    private HttpReporter httpReporter = new HttpReporter();
 
     public boolean isEnabled() {
         return enabled;
@@ -72,44 +64,31 @@ public class JaegerConfigurationProperties {
         this.serviceName = serviceName;
     }
 
-    public String getHttpCollectorUrl() {
-        return httpCollectorUrl;
+    public HttpReporter getHttpReporter() {
+        return httpReporter;
     }
 
-    public void setHttpCollectorUrl(String httpCollectorUrl) {
-        this.httpCollectorUrl = httpCollectorUrl;
+    public void setHttpReporter(HttpReporter httpReporter) {
+        this.httpReporter = httpReporter;
     }
 
-    public int getHttpCollectorFlushInterval() {
-        return httpCollectorFlushInterval;
-    }
+    public static class HttpReporter {
 
-    public void setHttpCollectorFlushInterval(int httpCollectorFlushInterval) {
-        this.httpCollectorFlushInterval = httpCollectorFlushInterval;
-    }
+        private String url;
 
-    public int getHttpCollectorMaxQueueSize() {
-        return httpCollectorMaxQueueSize;
-    }
+        private int flushInterval = 1000;
 
-    public void setHttpCollectorMaxQueueSize(int httpCollectorMaxQueueSize) {
-        this.httpCollectorMaxQueueSize = httpCollectorMaxQueueSize;
-    }
+        private int maxQueueSize = 100;
 
-    public int getHttpCollectorMaxPayload() {
-        return httpCollectorMaxPayload;
-    }
+        private int maxPayload = 1048576;
 
-    public void setHttpCollectorMaxPayload(int httpCollectorMaxPayload) {
-        this.httpCollectorMaxPayload = httpCollectorMaxPayload;
-    }
+        public String getUrl() {
+            return url;
+        }
 
-    private static class RemoteReporter {
-
-        private int flushInterval = 10;
-
-        private TimeUnit flushTimeUnit = TimeUnit.MILLISECONDS;
-
+        public void setUrl(String url) {
+            this.url = url;
+        }
 
         public int getFlushInterval() {
             return flushInterval;
@@ -119,12 +98,20 @@ public class JaegerConfigurationProperties {
             this.flushInterval = flushInterval;
         }
 
-        public TimeUnit getFlushTimeUnit() {
-            return flushTimeUnit;
+        public int getMaxQueueSize() {
+            return maxQueueSize;
         }
 
-        public void setFlushTimeUnit(TimeUnit flushTimeUnit) {
-            this.flushTimeUnit = flushTimeUnit;
+        public void setMaxQueueSize(int maxQueueSize) {
+            this.maxQueueSize = maxQueueSize;
+        }
+
+        public int getMaxPayload() {
+            return maxPayload;
+        }
+
+        public void setMaxPayload(int maxPayload) {
+            this.maxPayload = maxPayload;
         }
     }
 }
