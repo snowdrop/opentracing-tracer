@@ -20,9 +20,12 @@ import com.uber.jaeger.Tracer.Builder;
 import com.uber.jaeger.metrics.Metrics;
 import com.uber.jaeger.metrics.NullStatsReporter;
 import com.uber.jaeger.metrics.StatsFactoryImpl;
+import com.uber.jaeger.reporters.NoopReporter;
+import com.uber.jaeger.reporters.RemoteReporter;
 import com.uber.jaeger.reporters.Reporter;
 import com.uber.jaeger.samplers.ConstSampler;
 import com.uber.jaeger.samplers.Sampler;
+import com.uber.jaeger.senders.HttpSender;
 import com.uber.jaeger.tracerresolver.JaegerTracerResolver;
 import io.opentracing.contrib.tracerresolver.TracerResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,23 +73,26 @@ public class JaegerAutoConfiguration {
             return new ConstSampler(true); //TODO Ponder this since its probably not the best default
         }
 
-        /**
-         * Configure a remote Reporter
-         * TODO refactor to take into account the existence of CompositeReporter
-         */
         @ConditionalOnMissingBean(Reporter.class)
         @Bean
-        public Reporter remoteReporter(JaegerConfigurationProperties jaegerConfigurationProperties,
-                                       Metrics reporterMetrics) {
+        public Reporter reporter(JaegerConfigurationProperties properties, Metrics metrics) {
+            if (properties.getHttpCollectorUrl() != null && !properties.getHttpCollectorUrl().isEmpty()) {
+                HttpSender httpSender = getHttpSender(properties);
+                return new RemoteReporter(httpSender, properties.getHttpCollectorFlushInterval(),
+                        properties.getHttpCollectorMaxQueueSize(), metrics);
+            }
 
-            //TODO implement
-            return null;
+            return new NoopReporter();
         }
 
         @ConditionalOnMissingBean(Metrics.class)
         @Bean
         public Metrics reporterMetrics() {
             return new Metrics(new StatsFactoryImpl(new NullStatsReporter()));
+        }
+
+        private HttpSender getHttpSender(JaegerConfigurationProperties properties) {
+            return new HttpSender(properties.getHttpCollectorUrl(), properties.getHttpCollectorMaxPayload());
         }
     }
 

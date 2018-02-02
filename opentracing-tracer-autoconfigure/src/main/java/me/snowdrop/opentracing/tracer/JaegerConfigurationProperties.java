@@ -40,7 +40,13 @@ public class JaegerConfigurationProperties {
      */
     private String serviceName = "spring-boot";
 
-    private RemoteReporter remoteRemoteReporter = new RemoteReporter();
+    private String httpCollectorUrl;
+
+    private int httpCollectorFlushInterval;  // TODO add default
+
+    private int httpCollectorMaxQueueSize; // TODO add default
+
+    private int httpCollectorMaxPayload = 1048576;
 
     public boolean isEnabled() {
         return enabled;
@@ -66,12 +72,36 @@ public class JaegerConfigurationProperties {
         this.serviceName = serviceName;
     }
 
-    public RemoteReporter getRemoteRemoteReporter() {
-        return remoteRemoteReporter;
+    public String getHttpCollectorUrl() {
+        return httpCollectorUrl;
     }
 
-    public void setRemoteRemoteReporter(RemoteReporter remoteRemoteReporter) {
-        this.remoteRemoteReporter = remoteRemoteReporter;
+    public void setHttpCollectorUrl(String httpCollectorUrl) {
+        this.httpCollectorUrl = httpCollectorUrl;
+    }
+
+    public int getHttpCollectorFlushInterval() {
+        return httpCollectorFlushInterval;
+    }
+
+    public void setHttpCollectorFlushInterval(int httpCollectorFlushInterval) {
+        this.httpCollectorFlushInterval = httpCollectorFlushInterval;
+    }
+
+    public int getHttpCollectorMaxQueueSize() {
+        return httpCollectorMaxQueueSize;
+    }
+
+    public void setHttpCollectorMaxQueueSize(int httpCollectorMaxQueueSize) {
+        this.httpCollectorMaxQueueSize = httpCollectorMaxQueueSize;
+    }
+
+    public int getHttpCollectorMaxPayload() {
+        return httpCollectorMaxPayload;
+    }
+
+    public void setHttpCollectorMaxPayload(int httpCollectorMaxPayload) {
+        this.httpCollectorMaxPayload = httpCollectorMaxPayload;
     }
 
     private static class RemoteReporter {
