@@ -56,11 +56,11 @@ import java.util.List;
 @ConditionalOnClass(com.uber.jaeger.Tracer.class)
 @ConditionalOnMissingBean(io.opentracing.Tracer.class)
 @ConditionalOnProperty(value = "opentracing.jaeger.enabled", havingValue = "true", matchIfMissing = true)
-@EnableConfigurationProperties(JaegerConfigurationProperties.class)
 public class JaegerAutoConfiguration {
 
     @Configuration
     @ConditionalOnProperty(value = "opentracing.jaeger.useTracerResolver", havingValue = "false", matchIfMissing = true)
+    @EnableConfigurationProperties(JaegerConfigurationProperties.class)
     public static class ExplicitConfiguration {
 
         @Autowired(required = false)
