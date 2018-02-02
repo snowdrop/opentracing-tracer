@@ -26,6 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(
         classes = JaegerAutoConfiguration.class,
         properties = {
+                "spring.main.banner-mode=off",
                 "opentracing.jaeger.enabled=true"
         }
 )
