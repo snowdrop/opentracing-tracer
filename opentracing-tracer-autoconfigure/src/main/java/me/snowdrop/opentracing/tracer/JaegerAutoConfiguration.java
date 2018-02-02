@@ -20,7 +20,8 @@ import com.uber.jaeger.Tracer.Builder;
 import com.uber.jaeger.metrics.Metrics;
 import com.uber.jaeger.metrics.NullStatsReporter;
 import com.uber.jaeger.metrics.StatsFactoryImpl;
-import com.uber.jaeger.reporters.NoopReporter;
+import com.uber.jaeger.reporters.CompositeReporter;
+import com.uber.jaeger.reporters.LoggingReporter;
 import com.uber.jaeger.reporters.RemoteReporter;
 import com.uber.jaeger.reporters.Reporter;
 import com.uber.jaeger.samplers.ConstSampler;
@@ -37,6 +38,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -76,15 +78,26 @@ public class JaegerAutoConfiguration {
         @ConditionalOnMissingBean(Reporter.class)
         @Bean
         public Reporter reporter(JaegerConfigurationProperties properties, Metrics metrics) {
+
+            final List<Reporter> reporters = new LinkedList<>();
+
             final JaegerConfigurationProperties.HttpReporter httpReporter = properties.getHttpReporter();
             final String httpUrl = httpReporter.getUrl();
             if (httpUrl != null && !httpUrl.isEmpty()) {
-                HttpSender httpSender = getHttpSender(httpReporter);
-                return new RemoteReporter(httpSender, httpReporter.getFlushInterval(),
-                        httpReporter.getMaxQueueSize(), metrics);
+                reporters.add(getHttpReporter(metrics, httpReporter));
             }
 
-            return new NoopReporter();
+            if (properties.isLogSpans()) {
+                reporters.add(new LoggingReporter());
+            }
+
+            return new CompositeReporter(reporters.toArray(new Reporter[reporters.size()]));
+        }
+
+        private Reporter getHttpReporter(Metrics metrics, JaegerConfigurationProperties.HttpReporter httpReporter) {
+            HttpSender httpSender = getHttpSender(httpReporter);
+            return new RemoteReporter(httpSender, httpReporter.getFlushInterval(),
+                    httpReporter.getMaxQueueSize(), metrics);
         }
 
         @ConditionalOnMissingBean(Metrics.class)

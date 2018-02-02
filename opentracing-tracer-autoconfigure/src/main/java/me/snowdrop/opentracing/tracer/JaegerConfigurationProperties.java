@@ -38,6 +38,11 @@ public class JaegerConfigurationProperties {
      */
     private String serviceName = "spring-boot";
 
+    /**
+     * Whether spans should be logged to the console
+     */
+    private boolean logSpans = false;
+
     private HttpReporter httpReporter = new HttpReporter();
 
     public boolean isEnabled() {
@@ -62,6 +67,14 @@ public class JaegerConfigurationProperties {
 
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName;
+    }
+
+    public boolean isLogSpans() {
+        return logSpans;
+    }
+
+    public void setLogSpans(boolean logSpans) {
+        this.logSpans = logSpans;
     }
 
     public HttpReporter getHttpReporter() {
