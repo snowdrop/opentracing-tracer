@@ -44,11 +44,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.AbstractEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 /**
  * @author <a href="mailto:gytis@redhat.com">Gytis Trikleris</a>
@@ -186,18 +190,44 @@ public class JaegerAutoConfiguration {
     }
 
 
-    /**
-     * TODO perhaps in this case we can map some of the properties from the Spring environment to System Properties
-     * that TracerResolver expects
-     */
     @Configuration
     @ConditionalOnProperty(value = "opentracing.jaeger.useTracerResolver", havingValue = "true")
     @ConditionalOnClass(JaegerTracerResolver.class)
     public static class TracerResolverConfiguration {
 
         @Bean
-        public io.opentracing.Tracer tracer() {
+        public io.opentracing.Tracer tracer(AbstractEnvironment environment) {
+            copyJaegerPropertiesFromSpringEnvToSystemProps(environment);
             return TracerResolver.resolveTracer();
+        }
+
+        private void copyJaegerPropertiesFromSpringEnvToSystemProps(AbstractEnvironment environment) {
+            StreamSupport.stream(environment.getPropertySources().spliterator(), false)
+                    .filter(ps -> ps instanceof EnumerablePropertySource)
+                    .map(ps -> ((EnumerablePropertySource) ps).getPropertyNames())
+                    .flatMap(Arrays::<String>stream)
+                    .map(prop -> new Tuple2<>(prop, prop.toUpperCase().replace('.', '_')))
+                    .filter(t -> t.getV2().startsWith("JAEGER"))
+                    .filter(t -> !System.getProperties().containsKey(t.getV2())) //don't override explicitly set props
+                    .forEach(t -> System.setProperty(t.getV2(), environment.getProperty(t.getV1())));
+        }
+
+        private static class Tuple2<T1, T2> {
+            private final T1 v1;
+            private final T2 v2;
+
+            public Tuple2(T1 v1, T2 v2) {
+                this.v1 = v1;
+                this.v2 = v2;
+            }
+
+            public T1 getV1() {
+                return v1;
+            }
+
+            public T2 getV2() {
+                return v2;
+            }
         }
     }
 }

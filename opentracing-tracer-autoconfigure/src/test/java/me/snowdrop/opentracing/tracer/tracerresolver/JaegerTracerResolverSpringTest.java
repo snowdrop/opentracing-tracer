@@ -14,7 +14,6 @@
 package me.snowdrop.opentracing.tracer.tracerresolver;
 
 import me.snowdrop.opentracing.tracer.AbstractTracerSpringTest;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.test.context.TestPropertySource;
 
@@ -25,16 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
         properties = {
                 "spring.main.banner-mode=off",
                 "opentracing.jaeger.enabled=true",
-                "opentracing.jaeger.useTracerResolver=true"
+                "opentracing.jaeger.useTracerResolver=true",
+                "jaeger.service.name=spring-boot"
         }
 )
 public class JaegerTracerResolverSpringTest extends AbstractTracerSpringTest {
 
-    @BeforeClass
-    public static void beforeClass() {
-        //JAEGER_SERVICE_NAME is a mandatory property for TracerResolver
-        System.setProperty("JAEGER_SERVICE_NAME", "spring-boot");
-    }
 
     @Test
     public void testIfTracerIsJaegerTracer() {

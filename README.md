@@ -73,3 +73,13 @@ of type `JaegerTracerCustomizer`
 
 By supplying a bean of `ReporterAppender` the user can add custom as many custom `Reporter` as needed without
 having the forgo the ability to configure the standard reportes via auto-configuration
+
+### Use OpenTracing's TracerResolver
+
+If the user want's to construct the Tracer using `TracerResolver.resolveTracer` the property `opentracing.jaeger.useTracerResolver`
+needs to be set to true (in addition of course to `opentracing.jaeger.enable` being set to true)
+In such a case none of this project's defaults are used and neither are the other configuration properties consulted.
+Check out the [documentation](https://github.com/jaegertracing/jaeger-client-java/blob/master/jaeger-core/README.md) of TracerResolver
+for details on what properties need to be set.
+Those properties mentioned in the documentation can be set using any method Spring Boot supports and are not limited
+to System Properties and Environment Variables that TraceResolver supports out of the box
