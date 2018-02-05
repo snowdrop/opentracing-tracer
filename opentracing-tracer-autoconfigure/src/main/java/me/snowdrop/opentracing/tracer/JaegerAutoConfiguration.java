@@ -195,6 +195,7 @@ public class JaegerAutoConfiguration {
     @ConditionalOnClass(JaegerTracerResolver.class)
     public static class TracerResolverConfiguration {
 
+        @ConditionalOnMissingBean
         @Bean
         public io.opentracing.Tracer tracer(AbstractEnvironment environment) {
             copyJaegerPropertiesFromSpringEnvToSystemProps(environment);
