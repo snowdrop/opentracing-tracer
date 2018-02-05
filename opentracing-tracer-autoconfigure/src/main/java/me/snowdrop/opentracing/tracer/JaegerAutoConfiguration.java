@@ -95,13 +95,13 @@ public class JaegerAutoConfiguration {
                     properties.getRemoteReporterProperties();
             JaegerConfigurationProperties.HttpSenderProperties httpSenderProperties =
                     properties.getHttpSenderProperties();
-            if (!StringUtils.isEmpty(httpSenderProperties.getUrl())) {
+            if (!StringUtils.isEmpty(httpSenderProperties.getUrl()) && !httpSenderProperties.isDisable()) {
                 reporters.add(getHttpReporter(metrics, remoteReporterProperties, httpSenderProperties));
             }
 
             JaegerConfigurationProperties.UdpSenderProperties udpSenderProperties =
                     properties.getUdpSenderProperties();
-            if (!StringUtils.isEmpty(udpSenderProperties.getHost())) {
+            if (!StringUtils.isEmpty(udpSenderProperties.getHost()) && !udpSenderProperties.isDisable()) {
                 reporters.add(getUdpReporter(metrics, remoteReporterProperties, udpSenderProperties));
             }
 

@@ -209,6 +209,8 @@ public class JaegerConfigurationProperties {
 
         private int maxPayload = 1048576;
 
+        private boolean disable = false;
+
         public String getUrl() {
             return url;
         }
@@ -224,6 +226,14 @@ public class JaegerConfigurationProperties {
         public void setMaxPayload(int maxPayload) {
             this.maxPayload = maxPayload;
         }
+
+        public boolean isDisable() {
+            return disable;
+        }
+
+        public void setDisable(boolean disable) {
+            this.disable = disable;
+        }
     }
 
     public static class UdpSenderProperties {
@@ -233,6 +243,8 @@ public class JaegerConfigurationProperties {
         private int port;
 
         private int maxPacketSize = 65000;
+
+        private boolean disable = false;
 
         public String getHost() {
             return host;
@@ -256,6 +268,14 @@ public class JaegerConfigurationProperties {
 
         public void setMaxPacketSize(int maxPacketSize) {
             this.maxPacketSize = maxPacketSize;
+        }
+
+        public boolean isDisable() {
+            return disable;
+        }
+
+        public void setDisable(boolean disable) {
+            this.disable = disable;
         }
     }
 
