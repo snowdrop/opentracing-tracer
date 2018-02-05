@@ -104,3 +104,10 @@ Check out the [documentation](https://github.com/jaegertracing/jaeger-client-jav
 for details on what properties need to be set.
 Those properties mentioned in the documentation can be set using any method Spring Boot supports and are not limited
 to System Properties and Environment Variables that TraceResolver supports out of the box
+
+## Caution
+
+### Beware of the default sampler in production
+
+In a high traffic environment, the default sampler that is configured is very unsafe since it samples every request.
+It is therefore highly recommended to explicitly configure on of the other options in a production environment 
