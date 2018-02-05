@@ -13,10 +13,11 @@
 
 package me.snowdrop.opentracing.tracer.jaeger.starter;
 
-import io.opentracing.Tracer;
-import me.snowdrop.opentracing.tracer.jaeger.JaegerAutoConfiguration;
+import me.snowdrop.opentracing.tracer.zipkin.ZipkinAutoConfiguration;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
@@ -24,20 +25,21 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
-        classes = JaegerAutoConfiguration.class,
+        classes = ZipkinAutoConfiguration.class,
         properties = {
                 "spring.main.banner-mode=off",
-                "opentracing.jaeger.enabled=true"
+                "opentracing.zipkin.enabled=false"
         }
 )
-public class JaegerTracerCreatedSpringTest {
+public class ZipkinTracerNotCreatedSpringTest {
 
     @Autowired
     private ApplicationContext context;
 
-    @Test
-    public void testContextLoadsAndContainsTracer() {
-        context.getBean(Tracer.class);
+    @Test(expected = NoSuchBeanDefinitionException.class)
+    public void testContextLoadsAndDoesNotContainTracer() {
+        context.getBean(brave.opentracing.BraveTracer.class);
+        Assert.fail("No bean of type Tracer should have been found as opentracing.jaeger.enabled=false");
     }
 
 }

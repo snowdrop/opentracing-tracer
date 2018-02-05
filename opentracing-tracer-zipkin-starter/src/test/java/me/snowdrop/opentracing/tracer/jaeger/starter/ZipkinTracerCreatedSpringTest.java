@@ -11,20 +11,33 @@
  *  limitations under the License.
  */
 
-package me.snowdrop.opentracing.tracer;
+package me.snowdrop.opentracing.tracer.jaeger.starter;
 
 import io.opentracing.Tracer;
+import me.snowdrop.opentracing.tracer.zipkin.ZipkinAutoConfiguration;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {
-        JaegerAutoConfiguration.class
-})
-public abstract class AbstractTracerSpringTest {
+@SpringBootTest(
+        classes = ZipkinAutoConfiguration.class,
+        properties = {
+                "spring.main.banner-mode=off",
+                "opentracing.zipkin.enabled=true"
+        }
+)
+public class ZipkinTracerCreatedSpringTest {
 
-    @Autowired(required = false)
-    protected Tracer tracer;
+    @Autowired
+    private ApplicationContext context;
+
+    @Test
+    public void testContextLoadsAndContainsTracer() {
+        context.getBean(Tracer.class);
+    }
+
 }

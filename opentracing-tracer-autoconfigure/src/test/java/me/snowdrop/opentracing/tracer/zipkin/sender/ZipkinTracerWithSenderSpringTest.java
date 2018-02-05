@@ -11,29 +11,24 @@
  *  limitations under the License.
  */
 
-package me.snowdrop.opentracing.tracer.tracerresolver;
+package me.snowdrop.opentracing.tracer.zipkin.sender;
 
-import me.snowdrop.opentracing.tracer.AbstractTracerSpringTest;
 import org.junit.Test;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 @TestPropertySource(
         properties = {
                 "spring.main.banner-mode=off",
-                "opentracing.jaeger.enabled=true",
-                "opentracing.jaeger.useTracerResolver=true",
-                "jaeger.service.name=spring-boot"
+                "opentracing.zipkin.enabled=true",
+                "opentracing.zipkin.httpSenderProperties.url=http://test.com"
         }
 )
-public class JaegerTracerResolverSpringTest extends AbstractTracerSpringTest {
-
+public class ZipkinTracerWithSenderSpringTest extends AbstractZipkinTracerSenderSpringTest {
 
     @Test
-    public void testIfTracerIsJaegerTracer() {
-        assertThat(tracer).isNotNull();
-        assertThat(tracer).isInstanceOf(com.uber.jaeger.Tracer.class);
+    public void testIfTracerIsZipkinTracer() {
+        assertThat(isSenderBeanConfigured()).isTrue();
     }
 }

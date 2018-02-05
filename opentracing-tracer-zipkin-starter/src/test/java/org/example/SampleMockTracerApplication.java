@@ -11,20 +11,18 @@
  *  limitations under the License.
  */
 
-package me.snowdrop.opentracing.tracer;
+package org.example;
 
-import com.uber.jaeger.reporters.Reporter;
+import io.opentracing.Tracer;
+import io.opentracing.mock.MockTracer;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
-import java.util.Collection;
+@SpringBootApplication
+public class SampleMockTracerApplication {
 
-@FunctionalInterface
-public interface ReporterAppender {
-
-    /**
-     * Provides the ability to add custom Reporters
-     * other than the ones that are auto-configured
-     * based on the configuration
-     * Implementation should only add reporters to the collection
-     */
-    void append(Collection<Reporter> reporters);
+    @Bean
+    public Tracer mockTracer() {
+        return new MockTracer();
+    }
 }

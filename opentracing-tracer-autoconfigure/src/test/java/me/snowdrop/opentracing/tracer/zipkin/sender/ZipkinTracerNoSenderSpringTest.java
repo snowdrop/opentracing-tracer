@@ -11,20 +11,23 @@
  *  limitations under the License.
  */
 
-package me.snowdrop.opentracing.tracer.customizers;
+package me.snowdrop.opentracing.tracer.zipkin.sender;
 
-import com.uber.jaeger.Tracer;
-import com.uber.jaeger.propagation.B3TextMapCodec;
-import io.opentracing.propagation.Format;
-import me.snowdrop.opentracing.tracer.JaegerTracerCustomizer;
+import org.junit.Test;
+import org.springframework.test.context.TestPropertySource;
 
-public class B3CodecJaegerTracerCustomizer implements JaegerTracerCustomizer {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    @Override
-    public void customize(Tracer.Builder builder) {
-        B3TextMapCodec injector = new B3TextMapCodec();
+@TestPropertySource(
+        properties = {
+                "spring.main.banner-mode=off",
+                "opentracing.zipkin.enabled=true"
+        }
+)
+public class ZipkinTracerNoSenderSpringTest extends AbstractZipkinTracerSenderSpringTest {
 
-        builder.registerInjector(Format.Builtin.HTTP_HEADERS, injector)
-               .registerExtractor(Format.Builtin.HTTP_HEADERS, injector);
+    @Test
+    public void testIfTracerIsZipkinTracer() {
+        assertThat(isSenderBeanConfigured()).isFalse();
     }
 }

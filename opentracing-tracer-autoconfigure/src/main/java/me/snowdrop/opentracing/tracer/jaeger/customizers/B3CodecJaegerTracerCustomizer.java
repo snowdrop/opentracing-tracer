@@ -11,16 +11,20 @@
  *  limitations under the License.
  */
 
-package me.snowdrop.opentracing.tracer;
+package me.snowdrop.opentracing.tracer.jaeger.customizers;
 
 import com.uber.jaeger.Tracer;
+import com.uber.jaeger.propagation.B3TextMapCodec;
+import io.opentracing.propagation.Format;
+import me.snowdrop.opentracing.tracer.jaeger.JaegerTracerCustomizer;
 
-@FunctionalInterface
-public interface JaegerTracerCustomizer {
+public class B3CodecJaegerTracerCustomizer implements JaegerTracerCustomizer {
 
-    /**
-     * Provides the ability to execute arbitrary operations on the builder
-     * The customizer should NOT call the build method
-     */
-    void customize(Tracer.Builder builder);
+    @Override
+    public void customize(Tracer.Builder builder) {
+        B3TextMapCodec injector = new B3TextMapCodec();
+
+        builder.registerInjector(Format.Builtin.HTTP_HEADERS, injector)
+               .registerExtractor(Format.Builtin.HTTP_HEADERS, injector);
+    }
 }

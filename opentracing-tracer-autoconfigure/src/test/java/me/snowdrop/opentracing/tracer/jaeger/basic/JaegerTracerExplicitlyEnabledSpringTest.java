@@ -11,33 +11,25 @@
  *  limitations under the License.
  */
 
-package me.snowdrop.opentracing.tracer.jaeger.starter;
+package me.snowdrop.opentracing.tracer.jaeger.basic;
 
-import io.opentracing.Tracer;
-import me.snowdrop.opentracing.tracer.jaeger.JaegerAutoConfiguration;
+import me.snowdrop.opentracing.tracer.jaeger.AbstractJaegerTracerSpringTest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.TestPropertySource;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-        classes = JaegerAutoConfiguration.class,
+import static org.assertj.core.api.Assertions.assertThat;
+
+@TestPropertySource(
         properties = {
                 "spring.main.banner-mode=off",
                 "opentracing.jaeger.enabled=true"
         }
 )
-public class JaegerTracerCreatedSpringTest {
-
-    @Autowired
-    private ApplicationContext context;
+public class JaegerTracerExplicitlyEnabledSpringTest extends AbstractJaegerTracerSpringTest {
 
     @Test
-    public void testContextLoadsAndContainsTracer() {
-        context.getBean(Tracer.class);
+    public void testIfTracerIsJaegerTracer() {
+        assertThat(tracer).isNotNull();
+        assertThat(tracer).isInstanceOf(com.uber.jaeger.Tracer.class);
     }
-
 }

@@ -11,7 +11,7 @@
  *  limitations under the License.
  */
 
-package me.snowdrop.opentracing.tracer;
+package me.snowdrop.opentracing.tracer.jaeger;
 
 import com.uber.jaeger.Configuration;
 import org.springframework.boot.context.properties.ConfigurationProperties;

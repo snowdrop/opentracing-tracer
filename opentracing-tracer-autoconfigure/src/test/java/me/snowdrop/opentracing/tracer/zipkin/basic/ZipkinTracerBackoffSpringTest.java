@@ -11,12 +11,12 @@
  *  limitations under the License.
  */
 
-package me.snowdrop.opentracing.tracer.basic;
+package me.snowdrop.opentracing.tracer.zipkin.basic;
 
 import io.opentracing.Tracer;
 import io.opentracing.mock.MockTracer;
-import me.snowdrop.opentracing.tracer.AbstractTracerSpringTest;
-import me.snowdrop.opentracing.tracer.JaegerAutoConfiguration;
+import me.snowdrop.opentracing.tracer.jaeger.JaegerAutoConfiguration;
+import me.snowdrop.opentracing.tracer.zipkin.AbstractZipkinTracerSpringTest;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
@@ -31,21 +31,21 @@ import static org.assertj.core.api.Assertions.assertThat;
  * so the order of the classes simulates a real scenario
  */
 @SpringBootTest(classes = {
-        JaegerTracerBackoffSpringTest.MockTracerConfiguration.class,
+        ZipkinTracerBackoffSpringTest.MockTracerConfiguration.class,
         JaegerAutoConfiguration.class
 })
 @TestPropertySource(
         properties = {
                 "spring.main.banner-mode=off",
-                "opentracing.jaeger.enabled=true"
+                "opentracing.zipkin.enabled=true"
         }
 )
-public class JaegerTracerBackoffSpringTest extends AbstractTracerSpringTest {
+public class ZipkinTracerBackoffSpringTest extends AbstractZipkinTracerSpringTest {
 
     @Test
     public void testIfTracerIsMockTracer() {
         assertThat(tracer).isNotNull();
-        assertThat(tracer).isInstanceOf(io.opentracing.mock.MockTracer.class);
+        assertThat(tracer).isInstanceOf(MockTracer.class);
     }
 
     @Configuration

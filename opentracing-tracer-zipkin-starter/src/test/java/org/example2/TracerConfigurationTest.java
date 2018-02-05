@@ -25,7 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SampleJaegerTracerApplication.class, properties = {"spring.main.banner-mode=off"})
+@SpringBootTest(classes = SampleZipkinTracerApplication.class, properties = {"spring.main.banner-mode=off"})
 public class TracerConfigurationTest {
 
     @Autowired
@@ -35,7 +35,7 @@ public class TracerConfigurationTest {
     @Test
     public void testIfTracerIsConfiguredFromAutoconfigureNotOTContrib() {
         Tracer tracer = applicationContext.getBean(Tracer.class);
-        assertThat(tracer).isInstanceOf(com.uber.jaeger.Tracer.class);
+        assertThat(tracer).isInstanceOf(brave.opentracing.BraveTracer.class);
 
         final ConditionEvaluationReport conditionEvaluationReport =
                 ConditionEvaluationReport.get(this.applicationContext.getBeanFactory());
@@ -50,10 +50,10 @@ public class TracerConfigurationTest {
                         .isFullMatch()
         ).isFalse();
 
-        //assert that the JaegerAutoConfiguration was used
+        //assert that the ZipkinAutoConfiguration was used
         assertThat(conditionEvaluationReport
                 .getConditionAndOutcomesBySource()
-                .get("me.snowdrop.opentracing.tracer.jaeger.JaegerAutoConfiguration$ExplicitConfiguration")
+                .get("me.snowdrop.opentracing.tracer.zipkin.ZipkinAutoConfiguration")
                 .isFullMatch()
         ).isTrue();
     }

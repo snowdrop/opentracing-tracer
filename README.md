@@ -22,7 +22,7 @@ include the starter by adding the following to `pom.xml`
 
 ## Configuration options
 
-All the available configuration options can be seen in `me.snowdrop.opentracing.tracer.JaegerConfigurationProperties`.
+All the available configuration options can be seen in `me.snowdrop.opentracing.tracer.jaeger.JaegerConfigurationProperties`.
 The prefix to be used for these properties is `opentracing.jaeger`.
 
 ## Defaults

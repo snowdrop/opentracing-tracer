@@ -14,7 +14,7 @@
 package me.snowdrop.opentracing.tracer.jaeger.starter;
 
 import io.opentracing.Tracer;
-import me.snowdrop.opentracing.tracer.JaegerAutoConfiguration;
+import me.snowdrop.opentracing.tracer.jaeger.JaegerAutoConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

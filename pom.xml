@@ -59,6 +59,8 @@
     <jdk.min.version>${maven.compiler.source}</jdk.min.version>
 
     <jaeger.version>0.24.0</jaeger.version>
+    <brave-opentracing.version>0.25.0</brave-opentracing.version>
+    <zipkin-sender-okhttp.version>2.3.0</zipkin-sender-okhttp.version>
     <opentracing.version>0.31.0</opentracing.version>
     <opentracing-contrib.version>0.1.0</opentracing-contrib.version>
     <spring-boot.version>1.5.10.RELEASE</spring-boot.version>
@@ -91,6 +93,11 @@
         <groupId>com.uber.jaeger</groupId>
         <artifactId>jaeger-tracerresolver</artifactId>
         <version>${jaeger.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.opentracing.brave</groupId>
+        <artifactId>brave-opentracing</artifactId>
+        <version>${brave-opentracing.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -129,5 +136,6 @@
   <modules>
     <module>opentracing-tracer-autoconfigure</module>
     <module>opentracing-tracer-jaeger-starter</module>
+    <module>opentracing-tracer-zipkin-starter</module>
   </modules>
 </project>

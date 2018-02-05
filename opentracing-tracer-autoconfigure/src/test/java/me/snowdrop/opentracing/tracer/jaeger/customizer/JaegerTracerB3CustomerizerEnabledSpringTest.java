@@ -11,24 +11,34 @@
  *  limitations under the License.
  */
 
-package me.snowdrop.opentracing.tracer.basic;
+package me.snowdrop.opentracing.tracer.jaeger.customizer;
 
-import me.snowdrop.opentracing.tracer.AbstractTracerSpringTest;
+import me.snowdrop.opentracing.tracer.jaeger.AbstractJaegerTracerSpringTest;
+import me.snowdrop.opentracing.tracer.jaeger.JaegerTracerCustomizer;
+import me.snowdrop.opentracing.tracer.jaeger.customizers.B3CodecJaegerTracerCustomizer;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestPropertySource;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @TestPropertySource(
         properties = {
                 "spring.main.banner-mode=off",
-                "opentracing.jaeger.enabled=false"
+                "opentracing.jaeger.enableB3Propagation=true"
         }
 )
-public class JaegerTracerDisabledSpringTest extends AbstractTracerSpringTest {
+public class JaegerTracerB3CustomerizerEnabledSpringTest extends AbstractJaegerTracerSpringTest {
+
+    @Autowired
+    private List<JaegerTracerCustomizer> customizers;
 
     @Test
-    public void testNotTracerBeanExists() {
-        assertThat(tracer).isNull();
+    public void testCustomizersShouldContainB3Customizer() {
+        assertThat(customizers)
+                .isNotEmpty()
+                .extracting("class").contains(B3CodecJaegerTracerCustomizer.class);
     }
 }
