@@ -50,7 +50,7 @@ public class TracerConfigurationTest {
                         .isFullMatch()
         ).isFalse();
 
-        //assert that the JaegerAutoConfiguration was not used
+        //assert that the JaegerAutoConfiguration was used
         assertThat(conditionEvaluationReport
                 .getConditionAndOutcomesBySource()
                 .get("me.snowdrop.opentracing.tracer.JaegerAutoConfiguration$ExplicitConfiguration")
