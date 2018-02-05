@@ -9,16 +9,37 @@ Clone the project and install it to your local Maven repository using
     $ mvn clean install
 ```
 
-In a Spring Boot project for which auto-configuration of a Jaeger implementation of `io.opentracing.Tracer` is needed,
-include the starter by adding the following to `pom.xml`
+Depending on what kind of Spring project is to be instrumented, add of one the following dependencies
+
+* Spring MVC project 
+```xml
+<dependency>
+    <groupId>me.snowdrop</groupId>
+    <artifactId>opentracing-tracer-jaeger-spring-web-starter</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```
+
+
+* Spring Cloud project
+```xml
+<dependency>
+    <groupId>me.snowdrop</groupId>
+    <artifactId>opentracing-tracer-jaeger-spring-cloud-starter</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```
+
+If for some reason the user plans to include the instrumentation dependencies manually, then the 
+following starter can be used to simply include the auto-configuration code and Jaeger dependency
 
 ```xml
 <dependency>
     <groupId>me.snowdrop</groupId>
-    <artifactId>opentracing-tracer-jaeger-starter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <artifactId>opentracing-tracer-jaeger-starter</artifactId>
 </dependency>
-```
+``` 
 
 ## Configuration options
 

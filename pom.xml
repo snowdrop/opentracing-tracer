@@ -129,5 +129,7 @@
   <modules>
     <module>opentracing-tracer-autoconfigure</module>
     <module>opentracing-tracer-jaeger-starter</module>
+    <module>opentracing-tracer-jaeger-spring-web-starter</module>
+    <module>opentracing-tracer-jaeger-spring-cloud-starter</module>
   </modules>
 </project>
