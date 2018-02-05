@@ -84,7 +84,7 @@ public class JaegerAutoConfiguration {
             return builder.build();
         }
 
-        @ConditionalOnMissingBean(Reporter.class)
+        @ConditionalOnMissingBean
         @Bean
         public Reporter reporter(JaegerConfigurationProperties properties,
                                  Metrics metrics,
@@ -133,13 +133,13 @@ public class JaegerAutoConfiguration {
                     remoteReporterProperties.getMaxQueueSize(), metrics);
         }
 
-        @ConditionalOnMissingBean(Metrics.class)
+        @ConditionalOnMissingBean
         @Bean
         public Metrics reporterMetrics(StatsReporter statsReporter) {
             return Metrics.fromStatsReporter(statsReporter);
         }
 
-        @ConditionalOnMissingBean(StatsReporter.class)
+        @ConditionalOnMissingBean
         @Bean
         public StatsReporter statsReporter(JaegerConfigurationProperties properties) {
             if (properties.isEnableMetrics()) {
@@ -158,7 +158,7 @@ public class JaegerAutoConfiguration {
          * Decide on what Sampler to use based on the various configuration options in JaegerConfigurationProperties
          * Fallback to ConstSampler(true) when no Sampler is configured
          */
-        @ConditionalOnMissingBean(Sampler.class)
+        @ConditionalOnMissingBean
         @Bean
         public Sampler sampler(JaegerConfigurationProperties properties, Metrics metrics) {
             if (properties.getConstSampler().getDecision() != null) {
