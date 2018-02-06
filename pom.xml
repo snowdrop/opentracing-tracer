@@ -275,5 +275,6 @@
     <module>opentracing-tracer-jaeger-starter</module>
     <module>opentracing-tracer-jaeger-spring-web-starter</module>
     <module>opentracing-tracer-jaeger-spring-cloud-starter</module>
+    <module>opentracing-tracer-testsuite</module>
   </modules>
 </project>
