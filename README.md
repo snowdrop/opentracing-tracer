@@ -46,6 +46,11 @@ following starter can be used to simply include the auto-configuration code and 
 All the available configuration options can be seen in `me.snowdrop.opentracing.tracer.JaegerConfigurationProperties`.
 The prefix to be used for these properties is `opentracing.jaeger`.
 
+Beware to use the correct syntax for properties that are camel-case in `JaegerConfigurationProperties`.
+
+* For properties / yaml files use `-`. For example `opentracing.jaeger.log-spans=true`
+* For environment variables use `_`. For example `OPENTRACING_JAEGER_LOG-_SPANS` 
+
 ## Defaults
 
 If no configuration options are changed and the user does not manually provide any of the beans that the 
@@ -60,28 +65,28 @@ auto-configuration process provides, the following defaults are used:
 
 ### Set service name 
 
-Set `opentracing.jaeger.serviceName` to the desired name
+Set `opentracing.jaeger.service-name` to the desired name
 
 ### Define an HTTP collector
 
-Set `opentracing.jaeger.httpSender.url` to the URL of the Jaeger collector
+Set `opentracing.jaeger.http-sender.url` to the URL of the Jaeger collector
 
 ### Define a UDP collector
 
-Set `opentracing.jaeger.udpSender.host` to the host of the Jaeger collector
-and `opentracing.jaeger.udpSender.port` to the end of the Jaeger collector
+Set `opentracing.jaeger.udp-sender.host` to the host of the Jaeger collector
+and `opentracing.jaeger.udp-sender.port` to the end of the Jaeger collector
 
 ### Enable logging of spans
 
-Set `opentracing.jaeger.logSpans` to `true`
+Set `opentracing.jaeger.log-spans` to `true`
 
 ### Use a probabilistic sampler 
 
-Set `opentracing.jaeger.probabilisticSampler.samplingRate` to a value between `0.0` (no sampling) and `1.0` (sampling of every request)
+Set `opentracing.jaeger.probabilistic-sampler.sampling-rate` to a value between `0.0` (no sampling) and `1.0` (sampling of every request)
 
 ### Propagate headers in B3 format (for compatibility with Zipkin collectors)
 
-Set `opentracing.jaeger.enableB3Propagation` to `true`
+Set `opentracing.jaeger.enable-b3-propagation` to `true`
 
 ## Advanced cases
 
