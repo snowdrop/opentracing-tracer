@@ -31,8 +31,6 @@ import com.uber.jaeger.samplers.ProbabilisticSampler;
 import com.uber.jaeger.samplers.RateLimitingSampler;
 import com.uber.jaeger.samplers.RemoteControlledSampler;
 import com.uber.jaeger.samplers.Sampler;
-import com.uber.jaeger.senders.HttpSender;
-import com.uber.jaeger.senders.UdpSender;
 import com.uber.jaeger.tracerresolver.JaegerTracerResolver;
 import io.opentracing.contrib.tracerresolver.TracerResolver;
 import me.snowdrop.opentracing.tracer.customizers.B3CodecJaegerTracerCustomizer;
@@ -93,16 +91,16 @@ public class JaegerAutoConfiguration {
 
             JaegerConfigurationProperties.RemoteReporterProperties remoteReporterProperties =
                     properties.getRemoteReporterProperties();
-            JaegerConfigurationProperties.HttpSenderProperties httpSenderProperties =
-                    properties.getHttpSenderProperties();
-            if (!StringUtils.isEmpty(httpSenderProperties.getUrl()) && !httpSenderProperties.isDisable()) {
-                reporters.add(getHttpReporter(metrics, remoteReporterProperties, httpSenderProperties));
+            JaegerConfigurationProperties.HttpSender httpSender =
+                    properties.getHttpSender();
+            if (!StringUtils.isEmpty(httpSender.getUrl()) && !httpSender.isDisable()) {
+                reporters.add(getHttpReporter(metrics, remoteReporterProperties, httpSender));
             }
 
-            JaegerConfigurationProperties.UdpSenderProperties udpSenderProperties =
-                    properties.getUdpSenderProperties();
-            if (!StringUtils.isEmpty(udpSenderProperties.getHost()) && !udpSenderProperties.isDisable()) {
-                reporters.add(getUdpReporter(metrics, remoteReporterProperties, udpSenderProperties));
+            JaegerConfigurationProperties.UdpSender udpSender =
+                    properties.getUdpSender();
+            if (!StringUtils.isEmpty(udpSender.getHost()) && !udpSender.isDisable()) {
+                reporters.add(getUdpReporter(metrics, remoteReporterProperties, udpSender));
             }
 
             if (properties.isLogSpans()) {
@@ -118,8 +116,8 @@ public class JaegerAutoConfiguration {
 
         private Reporter getUdpReporter(Metrics metrics,
                 JaegerConfigurationProperties.RemoteReporterProperties remoteReporterProperties,
-                JaegerConfigurationProperties.UdpSenderProperties udpSenderProperties) {
-            UdpSender udpSender = new UdpSender(udpSenderProperties.getHost(), udpSenderProperties.getPort(),
+                JaegerConfigurationProperties.UdpSender udpSenderProperties) {
+            com.uber.jaeger.senders.UdpSender udpSender = new com.uber.jaeger.senders.UdpSender(udpSenderProperties.getHost(), udpSenderProperties.getPort(),
                     udpSenderProperties.getMaxPacketSize());
             return new RemoteReporter(udpSender, remoteReporterProperties.getFlushInterval(),
                     remoteReporterProperties.getMaxQueueSize(), metrics);
@@ -127,8 +125,8 @@ public class JaegerAutoConfiguration {
 
         private Reporter getHttpReporter(Metrics metrics,
                 JaegerConfigurationProperties.RemoteReporterProperties remoteReporterProperties,
-                JaegerConfigurationProperties.HttpSenderProperties httpSenderProperties) {
-            HttpSender httpSender = new HttpSender(httpSenderProperties.getUrl(), httpSenderProperties.getMaxPayload());
+                JaegerConfigurationProperties.HttpSender httpSenderProperties) {
+            com.uber.jaeger.senders.HttpSender httpSender = new com.uber.jaeger.senders.HttpSender(httpSenderProperties.getUrl(), httpSenderProperties.getMaxPayload());
             return new RemoteReporter(httpSender, remoteReporterProperties.getFlushInterval(),
                     remoteReporterProperties.getMaxQueueSize(), metrics);
         }

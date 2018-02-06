@@ -64,12 +64,12 @@ Set `opentracing.jaeger.serviceName` to the desired name
 
 ### Define an HTTP collector
 
-Set `opentracing.jaeger.httpSenderProperties.url` to the URL of the Jaeger collector
+Set `opentracing.jaeger.httpSender.url` to the URL of the Jaeger collector
 
 ### Define a UDP collector
 
-Set `opentracing.jaeger.udpSenderProperties.host` to the host of the Jaeger collector
-and `opentracing.jaeger.udpSenderProperties.port` to the end of the Jaeger collector
+Set `opentracing.jaeger.udpSender.host` to the host of the Jaeger collector
+and `opentracing.jaeger.udpSender.port` to the end of the Jaeger collector
 
 ### Enable logging of spans
 

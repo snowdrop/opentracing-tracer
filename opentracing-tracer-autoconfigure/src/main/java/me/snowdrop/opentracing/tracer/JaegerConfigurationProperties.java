@@ -59,9 +59,9 @@ public class JaegerConfigurationProperties {
 
     private RemoteReporterProperties remoteReporterProperties = new RemoteReporterProperties();
 
-    private HttpSenderProperties httpSenderProperties = new HttpSenderProperties();
+    private HttpSender httpSender = new HttpSender();
 
-    private UdpSenderProperties udpSenderProperties = new UdpSenderProperties();
+    private UdpSender udpSender = new UdpSender();
 
     private ConstSampler constSampler = new ConstSampler();
 
@@ -119,12 +119,12 @@ public class JaegerConfigurationProperties {
         this.enableMetrics = enableMetrics;
     }
 
-    public HttpSenderProperties getHttpSenderProperties() {
-        return httpSenderProperties;
+    public HttpSender getHttpSender() {
+        return httpSender;
     }
 
-    public void setHttpSenderProperties(HttpSenderProperties httpSenderProperties) {
-        this.httpSenderProperties = httpSenderProperties;
+    public void setHttpSender(HttpSender httpSender) {
+        this.httpSender = httpSender;
     }
 
     public RemoteReporterProperties getRemoteReporterProperties() {
@@ -136,13 +136,13 @@ public class JaegerConfigurationProperties {
         this.remoteReporterProperties = remoteReporterProperties;
     }
 
-    public UdpSenderProperties getUdpSenderProperties() {
-        return udpSenderProperties;
+    public UdpSender getUdpSender() {
+        return udpSender;
     }
 
-    public void setUdpSenderProperties(
-            UdpSenderProperties udpSenderProperties) {
-        this.udpSenderProperties = udpSenderProperties;
+    public void setUdpSender(
+            UdpSender udpSender) {
+        this.udpSender = udpSender;
     }
 
     public ConstSampler getConstSampler() {
@@ -203,7 +203,7 @@ public class JaegerConfigurationProperties {
 
     }
 
-    public static class HttpSenderProperties {
+    public static class HttpSender {
 
         private String url;
 
@@ -236,7 +236,7 @@ public class JaegerConfigurationProperties {
         }
     }
 
-    public static class UdpSenderProperties {
+    public static class UdpSender {
 
         private String host;
 
