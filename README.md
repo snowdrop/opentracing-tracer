@@ -49,7 +49,7 @@ The prefix to be used for these properties is `opentracing.jaeger`.
 Beware to use the correct syntax for properties that are camel-case in `JaegerConfigurationProperties`.
 
 * For properties / yaml files use `-`. For example `opentracing.jaeger.log-spans=true`
-* For environment variables use `_`. For example `OPENTRACING_JAEGER_LOG-_SPANS` 
+* For environment variables use `_`. For example `OPENTRACING_JAEGER_LOG_SPANS` 
 
 ## Defaults
 
