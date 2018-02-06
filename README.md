@@ -73,7 +73,7 @@ and `opentracing.jaeger.udpSenderProperties.port` to the end of the Jaeger colle
 
 ### Enable logging of spans
 
-Set `opentracing.jaeger.httpSenderProperties.logSpans` to `true`
+Set `opentracing.jaeger.logSpans` to `true`
 
 ### Use a probabilistic sampler 
 
