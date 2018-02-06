@@ -3,11 +3,16 @@ Spring Boot autoconfiguration for OpenTracing tracer implementations
 
 ## Usage
 
-Clone the project and install it to your local Maven repository using 
-
-```bash
-    $ mvn clean install
-```
+Add the following configuration to your pom (enabling the jboss snapshot repository)
+```xml
+    <repositories>
+        <repository>
+            <id>jboss-snapshots-repository</id>
+            <name>JBoss Snapshots Repository</name>
+            <url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+``` 
 
 Depending on what kind of Spring project is to be instrumented, add of one the following dependencies
 
