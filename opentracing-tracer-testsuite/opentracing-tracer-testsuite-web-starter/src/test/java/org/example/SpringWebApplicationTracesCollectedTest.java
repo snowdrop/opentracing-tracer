@@ -31,6 +31,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.LogMessageWaitStrategy;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,7 +54,7 @@ public class SpringWebApplicationTracesCollectedTest {
             = new GenericContainer("jaegertracing/all-in-one:latest")
             .withExposedPorts(COLLECTOR_PORT, QUERY_PORT)
             //make sure we wait until the collector is ready
-            .waitingFor(new LogMessageWaitStrategy().withRegEx(".*jaeger-collector.*\n"));
+            .waitingFor(new LogMessageWaitStrategy().withRegEx(".*jaeger-query.*HTTP server.*\n"));
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -84,10 +85,13 @@ public class SpringWebApplicationTracesCollectedTest {
                 .build();
 
         await().atMost(10, TimeUnit.SECONDS).until(() -> {
-            Response response = okHttpClient.newCall(request).execute();
-            final String output = response.body().string();
-            System.out.println("traces = " + output);
-            return output.contains(operation);
+            try {
+                Response response = okHttpClient.newCall(request).execute();
+                final String output = response.body().string();
+                return output.contains(operation);
+            } catch (IOException e) {
+                return false;
+            }
         });
     }
 
