@@ -66,6 +66,15 @@ auto-configuration process provides, the following defaults are used:
 * A `ConstSampler` with the value of `true`. This means that every trace will be sampled
 * A `NullStatsReporter` is used - effectively meaning that no stats will be collected about the reporting of traces
 
+## Manual bean provisioning
+
+Any of the following beans can be provided by the application (by adding configuring them as bean with `@Bean` for example)
+and will be used to by the Tracer instead of the auto-configured beans.
+
+* `com.uber.jaeger.samplers.Sampler`  
+* `com.uber.jaeger.metrics.StatsReporter`  
+* `com.uber.jaeger.reporters.Reporter` 
+
 ## Common cases
 
 ### Set service name 
