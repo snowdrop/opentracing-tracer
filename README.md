@@ -73,6 +73,7 @@ and will be used to by the Tracer instead of the auto-configured beans.
 
 * `com.uber.jaeger.samplers.Sampler`  
 * `com.uber.jaeger.metrics.StatsReporter`  
+* `com.uber.jaeger.metrics.Metrics`  
 * `com.uber.jaeger.reporters.Reporter` 
 
 ## Common cases
