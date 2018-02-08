@@ -51,7 +51,7 @@ public class SpringWebApplicationTracesCollectedTest {
 
     @ClassRule
     public static GenericContainer jaeger
-            = new GenericContainer("jaegertracing/all-in-one:latest")
+            = new GenericContainer("jaegertracing/all-in-one:1.2.0")
             .withExposedPorts(COLLECTOR_PORT, QUERY_PORT)
             //make sure we wait until the collector is ready
             .waitingFor(new LogMessageWaitStrategy().withRegEx(".*jaeger-query.*HTTP server.*\n"));
