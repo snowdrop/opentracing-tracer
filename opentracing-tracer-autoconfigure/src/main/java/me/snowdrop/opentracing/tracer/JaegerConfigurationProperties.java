@@ -57,19 +57,19 @@ public class JaegerConfigurationProperties {
      */
     private boolean enableMetrics = false;
 
-    private RemoteReporterProperties remoteReporterProperties = new RemoteReporterProperties();
+    private final RemoteReporterProperties remoteReporterProperties = new RemoteReporterProperties();
 
-    private HttpSender httpSender = new HttpSender();
+    private final HttpSender httpSender = new HttpSender();
 
-    private UdpSender udpSender = new UdpSender();
+    private final UdpSender udpSender = new UdpSender();
 
-    private ConstSampler constSampler = new ConstSampler();
+    private final ConstSampler constSampler = new ConstSampler();
 
-    private ProbabilisticSampler probabilisticSampler = new ProbabilisticSampler();
+    private final ProbabilisticSampler probabilisticSampler = new ProbabilisticSampler();
 
-    private RateLimitingSampler rateLimitingSampler = new RateLimitingSampler();
+    private final RateLimitingSampler rateLimitingSampler = new RateLimitingSampler();
 
-    private RemoteControlledSampler remoteControlledSampler = new RemoteControlledSampler();
+    private final RemoteControlledSampler remoteControlledSampler = new RemoteControlledSampler();
 
     public boolean isEnabled() {
         return enabled;
@@ -123,58 +123,28 @@ public class JaegerConfigurationProperties {
         return httpSender;
     }
 
-    public void setHttpSender(HttpSender httpSender) {
-        this.httpSender = httpSender;
-    }
-
     public RemoteReporterProperties getRemoteReporterProperties() {
         return remoteReporterProperties;
-    }
-
-    public void setRemoteReporterProperties(
-            RemoteReporterProperties remoteReporterProperties) {
-        this.remoteReporterProperties = remoteReporterProperties;
     }
 
     public UdpSender getUdpSender() {
         return udpSender;
     }
 
-    public void setUdpSender(
-            UdpSender udpSender) {
-        this.udpSender = udpSender;
-    }
-
     public ConstSampler getConstSampler() {
         return constSampler;
-    }
-
-    public void setConstSampler(ConstSampler constSampler) {
-        this.constSampler = constSampler;
     }
 
     public ProbabilisticSampler getProbabilisticSampler() {
         return probabilisticSampler;
     }
 
-    public void setProbabilisticSampler(ProbabilisticSampler probabilisticSampler) {
-        this.probabilisticSampler = probabilisticSampler;
-    }
-
     public RateLimitingSampler getRateLimitingSampler() {
         return rateLimitingSampler;
     }
 
-    public void setRateLimitingSampler(RateLimitingSampler rateLimitingSampler) {
-        this.rateLimitingSampler = rateLimitingSampler;
-    }
-
     public RemoteControlledSampler getRemoteControlledSampler() {
         return remoteControlledSampler;
-    }
-
-    public void setRemoteControlledSampler(RemoteControlledSampler remoteControlledSampler) {
-        this.remoteControlledSampler = remoteControlledSampler;
     }
 
 
