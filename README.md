@@ -130,4 +130,15 @@ to System Properties and Environment Variables that TraceResolver supports out o
 ### Beware of the default sampler in production
 
 In a high traffic environment, the default sampler that is configured is very unsafe since it samples every request.
-It is therefore highly recommended to explicitly configure on of the other options in a production environment 
+It is therefore highly recommended to explicitly configure on of the other options in a production environment
+
+
+## Development
+
+### Executing tests
+
+In order for all tests to run correctly, the docker daemon need to be running on the system
+
+Run the tests be executing
+
+`mvn clean test` 
