@@ -20,7 +20,7 @@
   <groupId>me.snowdrop</groupId>
   <artifactId>opentracing-tracer-parent</artifactId>
   <packaging>pom</packaging>
-  <version>0.1</version>
+  <version>0.2-SNAPSHOT</version>
 
   <name>Spring Boot OpenTracing auto-configuration</name>
   <description>Spring Boot auto-configuration for OpenTracing tracer implementations</description>
@@ -30,7 +30,7 @@
     <url>https://github.com/snowdrop/opentracing-tracer</url>
     <connection>scm:git:https://github.com/snowdrop/opentracing-tracer.git</connection>
     <developerConnection>scm:git:git@github.com:snowdrop/opentracing-tracer.git</developerConnection>
-    <tag>0.1</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <licenses>
