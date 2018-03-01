@@ -63,10 +63,18 @@ public class SpringWebApplicationTracesCollectedTest {
 
     @Test
     public void testJaegerCollectsTraces() {
+        ensureThatJaegerCollectorHasInitialized();
+
         final String operation = "hello";
         assertThat(restTemplate.getForObject("/" + operation, String.class)).isNotBlank();
 
         waitJaegerQueryContains(SERVICE_NAME, operation);
+    }
+
+    private void ensureThatJaegerCollectorHasInitialized() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException ignored) {}
     }
 
     private void waitJaegerQueryContains(String serviceName, String operation) {
@@ -84,7 +92,7 @@ public class SpringWebApplicationTracesCollectedTest {
                 .get()
                 .build();
 
-        await().atMost(10, TimeUnit.SECONDS).until(() -> {
+        await().atMost(30, TimeUnit.SECONDS).until(() -> {
             try {
                 Response response = okHttpClient.newCall(request).execute();
                 final String output = response.body().string();
