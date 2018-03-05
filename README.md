@@ -3,17 +3,6 @@ Spring Boot autoconfiguration for OpenTracing tracer implementations
 
 ## Usage
 
-Add the following configuration to your pom (enabling the jboss snapshot repository)
-```xml
-    <repositories>
-        <repository>
-            <id>jboss-snapshots-repository</id>
-            <name>JBoss Snapshots Repository</name>
-            <url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
-``` 
-
 Depending on what kind of Spring project is to be instrumented, add of one the following dependencies
 
 * Spring MVC project 
@@ -21,7 +10,7 @@ Depending on what kind of Spring project is to be instrumented, add of one the f
 <dependency>
     <groupId>me.snowdrop</groupId>
     <artifactId>opentracing-tracer-jaeger-spring-web-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
