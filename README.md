@@ -20,7 +20,7 @@ Depending on what kind of Spring project is to be instrumented, add of one the f
 <dependency>
     <groupId>me.snowdrop</groupId>
     <artifactId>opentracing-tracer-jaeger-spring-cloud-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
@@ -30,7 +30,7 @@ following starter can be used to simply include the auto-configuration code and 
 ```xml
 <dependency>
     <groupId>me.snowdrop</groupId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
     <artifactId>opentracing-tracer-jaeger-starter</artifactId>
 </dependency>
 ``` 
