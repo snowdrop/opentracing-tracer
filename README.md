@@ -14,7 +14,7 @@ Depending on what kind of Spring project is to be instrumented, add of one the f
 <dependency>
     <groupId>me.snowdrop</groupId>
     <artifactId>opentracing-tracer-jaeger-spring-web-starter</artifactId>
-    <version>0.1.0</version>
+    <version>0.1</version>
 </dependency>
 ```
 
@@ -24,7 +24,7 @@ Depending on what kind of Spring project is to be instrumented, add of one the f
 <dependency>
     <groupId>me.snowdrop</groupId>
     <artifactId>opentracing-tracer-jaeger-spring-cloud-starter</artifactId>
-    <version>0.1.0</version>
+    <version>0.1</version>
 </dependency>
 ```
 
