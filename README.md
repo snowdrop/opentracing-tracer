@@ -34,7 +34,7 @@ following starter can be used to simply include the auto-configuration code and 
 ```xml
 <dependency>
     <groupId>me.snowdrop</groupId>
-    <version>0.1.0</version>
+    <version>0.1</version>
     <artifactId>opentracing-tracer-jaeger-starter</artifactId>
 </dependency>
 ``` 
