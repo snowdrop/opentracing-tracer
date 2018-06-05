@@ -3,7 +3,7 @@ Spring Boot autoconfiguration for OpenTracing tracer implementations
 
 **WARNING**
 
-This repo has been deprecated. Please use [this](https://github.com/opentracing-contrib/java-spring-cloud/tree/master/opentracing-spring-cloud-starter-jaeger) module instead
+This repo has been deprecated. Please use [this](https://github.com/opentracing-contrib/java-spring-jaeger) module instead
 
 ## Usage
 
